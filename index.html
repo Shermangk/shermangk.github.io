@@ -3,215 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gokwik Success Showcase</title>
-    <!-- Tailwind CSS CDN -->
+    <title>GoKwik Success Showcase</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js CDN for the GNC graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <style>
-        /* Custom font for better aesthetics - Inter is a good match for the clean sans-serif look */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f09819; /* User requested background */
-            color: var(--text-dark); /* Dark text for readability */
-        }
-        /* Custom CSS Variables for Gokwik Theme based on Logo */
         :root {
-            --gokwik-blue: #1A4B8F; /* Deep Blue from logo */
-            --gokwik-golden: #FDCB00; /* Golden Yellow from logo */
+            /* New Gokwik Theme Colors */
+            --gokwik-primary-blue: #113665; /* Primary Blue */
+            --gokwik-primary-orange: #f09819; /* Primary Orange */
+
+            /* Derived Shades for Blue */
+            --gokwik-blue-darker: #0d2547; /* Darkest blue for background */
+            --gokwik-blue-medium: #113665; /* Main blue */
+            --gokwik-blue-light: #2a6ca6; /* Lighter blue for gradients/accents */
 
             /* General UI colors */
             --white: #FFFFFF;
-            --light-gray: #F8F9FA;
-            --medium-gray: #E9ECEF;
-            --dark-gray: #343A40;
+            --light-gray: #F0F4F8; /* Softer light gray for card backgrounds */
+            --medium-gray: #DCE3E8; /* Slightly darker medium gray for tab buttons */
+            --dark-gray: #2C3E50; /* General dark text/UI element color */
 
             /* Text colors */
-            --text-dark: var(--dark-gray);
-            --text-medium: #495057; /* Slightly lighter dark gray for general text */
+            --text-default: var(--dark-gray); /* Default text color on light backgrounds */
+            --text-on-dark: var(--white); /* Text color on dark backgrounds */
+            --text-accent-medium: #5C7080; /* Medium gray for general text */
+            --text-gokwik-blue: var(--gokwik-primary-blue); /* Specific dark text for Gokwik branding */
+            --text-gokwik-orange: var(--gokwik-primary-orange); /* Specific orange text */
 
             /* Accent colors for trends */
-            --accent-green: #28A745;
-            --accent-red: #DC3545;
+            --accent-green: #2ECC71;
+            --accent-red: #E74C3C;
 
-            /* Specific colors for POD graphs (keeping original for now unless specified) */
-            --pod-color-sherman-adarsh: #B3D9FF; /* Light Blue */
-            --pod-color-sherman-venkat: #FFD700; /* Yellow */
-            --pod-color-sherman-anjali: #D8BFD8; /* Light Purple */
-            --pod-color-sherman-deep: #00CED1; /* Teal */
-            --pod-color-sherman-vishal: #F0F0F0; /* Very Light Gray */
-            --pod-color-sherman-mayur: #F0F0F0; /* Very Light Gray */
-            --pod-color-sherman-total: #D8BFD8; /* Light Purple */
+            /* Specific colors for POD graphs - harmonized with new scheme */
+            --pod-color-1: #345E99; /* A shade of blue */
+            --pod-color-2: #5D8CC9; /* Another shade of blue */
+            --pod-color-3: #87B8E8; /* Lighter shade of blue */
+            --pod-color-4: #B0D0F0; /* Even lighter blue */
+            --pod-color-5: #D9E9FA; /* Very light blue */
+            --pod-color-total: var(--gokwik-primary-orange); /* Orange for total */
 
-            --pod-color-hardik-jiten: #B3D9FF; /* Light Blue */
-            --pod-hardik-atul: #FFD700; /* Yellow */
-            --pod-color-hardik-manisha: #D8BFD8; /* Light Purple */
-            --pod-color-hardik-devika: #AEC6E8; /* Medium Light Blue */
-            --pod-color-hardik-total: #AEC6E8; /* Medium Light Blue */
-
-            --pod-color-ankit-ankit: #B3D9FF; /* Light Blue */
-            --pod-color-ankit-sakshi: #FFD700; /* Yellow */
-
-            --pod-color-sujit-sujit: #FFD700; /* Yellow */
-
-            /* New CSS variable for POD max value */
             --pod-max-value: 11.0;
 
-            /* Vibrant colors for Upsell/Cross-sell Pie Chart (updated to complement new theme) */
-            --pie-color-1: var(--gokwik-blue); /* Deep Blue */
-            --pie-color-2: var(--gokwik-golden); /* Golden Yellow */
-            --pie-color-3: #6A5ACD; /* Slate Blue (complementary) */
-            --pie-color-4: var(--accent-green); /* Green (for checkout upsell) */
-            --pie-color-5: #FF8C00; /* Dark Orange (complementary) */
+            /* Specific colors for each POD member */
+            --pod-color-sherman-adarsh: #4A90E2;
+            --pod-color-sherman-venkat: #FFC107;
+            --pod-color-sherman-anjali: #9C27B0;
+            --pod-color-sherman-deep: #00BCD4;
+            --pod-color-sherman-vishal: #795548;
+            --pod-color-sherman-mayur: #607D8B;
+
+            --pod-color-hardik-jiten: #8BC34A;
+            --pod-hardik-atul: #FF5722;
+            --pod-color-hardik-manisha: #E91E63;
+            --pod-color-hardik-devika: #673AB7;
+
+            --pod-color-ankit-ankit: #03A9F4;
+            --pod-color-ankit-sakshi: #FF9800;
+
+            --pod-color-sujit-sujit: #4CAF50;
+
+
+            /* Vibrant colors for Upsell/Cross-sell Pie Chart - updated to new theme */
+            --pie-color-1: var(--gokwik-primary-blue);
+            --pie-color-2: var(--gokwik-primary-orange);
+            --pie-color-3: var(--gokwik-blue-light);
+            --pie-color-4: var(--accent-green);
+
+            /* AI Automation specific colors from new content */
+            --ai-text-light: #f8fafc; /* For text on dark backgrounds */
+            --ai-text-dark: #2a3a4c; /* Darker text for contrast on light */
+            --ai-bg-light: #f8fafc;
+            --ai-dark-blue-bg: #0d2547; /* Deeper blue for sections */
+            --ai-gradient-start: #113665;
+            --ai-gradient-end: #f09819;
         }
 
-        /* Custom styles for card shadows, subtle and clean */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gokwik-blue-darker); /* Darker background */
+            color: var(--text-default);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Subtle Background Animation for overall page (from new AI content) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(17, 54, 101, 0.05) 0%, transparent 20%),
+                        radial-gradient(circle at 90% 90%, rgba(240, 152, 25, 0.05) 0%, transparent 20%);
+            animation: backgroundPulse 15s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0% { background-position: 0% 0%, 100% 100%; }
+            100% { background-position: 100% 100%, 0% 0%; }
+        }
+
+        .main-content-container {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1200px;
+            display: block;
+        }
+
         .card-shadow {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        /* Gokwik Brand Colors - Adjusted to fit new theme */
-        .text-gokwik-accent {
-            color: var(--gokwik-blue); /* Use deep blue for accents */
-        }
-        .bg-gokwik-light {
-            background-color: var(--white); /* White for contrast on body background */
-            color: var(--text-dark); /* Dark text on white */
-        }
-        .bg-gokwik-dark {
-            background-color: var(--gokwik-blue); /* Use deep blue for dark background */
-            color: var(--white); /* White text on dark blue */
-        }
-        .text-gokwik-dark-text {
-            color: var(--text-dark); /* Dark text */
+        .main-header {
+            background: linear-gradient(135deg, var(--gokwik-blue-darker), var(--gokwik-blue-medium)); /* Darker blue gradient */
+            color: var(--text-on-dark);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Excellence Charter specific colors - adjusted to fit the professional theme */
-        .bg-excellence-fixer {
-            background-color: var(--medium-gray); /* Light gray */
-            color: var(--text-dark);
+        .gokwik-logo-text {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
-        .bg-excellence-training {
-            background-color: var(--medium-gray); /* Light gray */
-            color: var(--text-dark);
+        .gokwik-logo-text span:first-child {
+            color: var(--text-on-dark);
         }
-        .bg-excellence-snapshot {
-            background-color: var(--medium-gray); /* Light gray */
-            color: var(--text-dark);
-        }
-        .bg-excellence-communication {
-            background-color: var(--medium-gray); /* Light gray */
-            color: var(--text-dark);
+        .gokwik-logo-text span:last-child {
+            color: var(--gokwik-primary-orange);
         }
 
-        /* Faded Gokwik Logo in Background - REMOVED for professional theme */
-        .gokwik-bg-logo {
-            display: none; /* Hide the background logo */
+        .tab-nav-container {
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
         }
 
-        /* Styles for tab navigation */
         .tab-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
+            padding: 0.85rem 1.75rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            background-color: var(--medium-gray); /* Light gray */
-            color: var(--text-medium); /* Medium gray text */
+            transition: all 0.3s ease; /* Simplified transition */
+            background-color: var(--medium-gray);
+            color: var(--text-accent-medium);
             border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow for buttons */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .tab-button:hover {
+            background-color: var(--medium-gray);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
         .tab-button.active {
-            background-color: var(--gokwik-blue); /* Deep blue */
-            color: var(--white);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* More prominent shadow for active */
+            background-color: var(--gokwik-primary-blue);
+            color: var(--text-on-dark);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            transform: translateY(0);
+            border: 2px solid var(--gokwik-primary-orange);
         }
         .tab-content {
             display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-out; /* Simplified transition */
         }
         .tab-content.active {
             display: block;
+            opacity: 1;
         }
 
-        /* Specific styles for POD Overlook - bar chart visualization */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Simplified transition */
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .summary-metric {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gokwik-primary-blue); /* Kept blue for contrast */
+            line-height: 1;
+        }
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--text-accent-medium);
+            margin-top: 0.5rem;
+        }
+
         .pod-chart-container {
-            height: 250px; /* Increased height for better visual distinction of bars */
+            height: 280px;
             width: 100%;
-            background-color: var(--white); /* White background for chart area */
-            border-radius: 0.5rem;
-            padding: 1rem;
+            background-color: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            padding-bottom: 3rem;
             display: flex;
-            align-items: flex-end; /* Bars grow from bottom */
+            align-items: flex-end;
             justify-content: space-around;
-            gap: 0.75rem; /* Increased gap between bars */
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* Inner shadow for depth */
-            position: relative; /* For positioning value labels */
+            gap: 2rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--medium-gray);
+            border-left: 2px solid var(--medium-gray);
+            background-image: linear-gradient(to top, transparent 99%, var(--light-gray) 2px),
+                              linear-gradient(to top, transparent 99%, var(--light-gray) 2px),
+                              linear-gradient(to top, transparent 99%, var(--light-gray) 2px),
+                              linear-gradient(to top, transparent 99%, var(--light-gray) 2px),
+                              linear-gradient(to top, transparent 99%, var(--light-gray) 2px);
+            background-size: 100% 20%, 100% 40%, 100% 60%, 100% 80%, 100% 100%;
+            background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+            background-repeat: no-repeat;
         }
         .pod-bar-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; /* Ensure content aligns to bottom */
-            flex-grow: 1; /* Allow bars to take equal width */
-            max-width: 15%; /* Limit width of individual bars to prevent squishing */
-            position: relative; /* For positioning value labels */
+            justify-content: flex-end;
+            flex-grow: 1;
+            max-width: 10%;
+            position: relative;
+            height: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pod-bar-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
         .pod-bar {
-            width: 80%; /* Width of the actual bar */
-            background-color: var(--gokwik-blue); /* Default bar color */
-            border-radius: 0.125rem; /* Slight rounding */
-            transition: height 0.3s ease-out; /* Smooth height transition */
+            width: 90%;
+            border-radius: 0.25rem;
             position: relative;
             display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 0.25rem; /* Padding for value inside bar */
-            color: var(--white);
-            font-size: 0.75rem;
-            font-weight: 600;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            color: var(--text-on-dark);
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: linear-gradient(to top, var(--bar-start-color), var(--bar-end-color));
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            height: var(--bar-height); /* This was missing! */
         }
-        .pod-bar-value {
-            position: absolute;
-            top: -1.25rem; /* Position above the bar */
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 600;
-            color: var(--text-dark);
+        .pod-bar-value-display {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-on-dark);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            white-space: nowrap;
+            margin-bottom: auto;
         }
         .pod-bar-label {
-            font-size: 0.75rem; /* text-xs */
-            color: var(--text-medium);
-            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-accent-medium);
+            margin-top: 0.75rem;
             text-align: center;
-            word-break: break-word; /* Allow long labels to break */
+            word-break: break-word;
+            line-height: 1.3;
+            font-weight: 600;
         }
         .pod-legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
             justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
         .pod-legend-item {
             display: flex;
             align-items: center;
-            font-size: 0.875rem; /* text-sm */
-            color: var(--text-medium);
+            font-size: 0.9rem;
+            color: var(--text-accent-medium);
         }
         .pod-legend-color {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 0.25rem;
-            margin-right: 0.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.35rem;
+            margin-right: 0.6rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Pie chart simulation for Upsell/Cross sell */
         .pie-chart-container {
             position: relative;
-            width: 180px;
-            height: 180px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             overflow: hidden;
-            background-color: var(--medium-gray); /* Light gray background for empty space */
+            background-color: var(--medium-gray);
             margin: 0 auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, opacity 0.3s ease; /* Simplified transition */
         }
 
         .pie-slice {
@@ -221,228 +343,930 @@
             width: 100%;
             height: 100%;
             transform-origin: 50% 50%;
-            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%); /* Default full circle */
         }
-        /* These will be overridden by inline styles for actual slices */
-        .pie-slice-1 { background-color: var(--pie-color-1); }
-        .pie-slice-2 { background-color: var(--pie-color-2); }
-        .pie-slice-3 { background-color: var(--pie-color-3); }
-        .pie-slice-4 { background-color: var(--pie-color-4); }
-        .pie-slice-5 { background-color: var(--pie-color-5); }
 
-
-        /* Styles for Excellence Charter cards - Updated */
-        .excellence-card {
-            @apply rounded-xl p-6 card-shadow flex flex-col items-center text-center;
-            min-height: 200px;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            background-color: var(--white); /* White background for cards */
-            color: var(--text-dark); /* Dark text */
-            border: none;
-        }
-        .excellence-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-        .excellence-card-image {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .excellence-card-image svg {
+        .pie-chart-hover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .pie-chart-container:hover .pie-chart-hover-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .excellence-group-card {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(17, 54, 101, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Simplified transition */
+        }
+        .excellence-group-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .excellence-card {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 220px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Simplified transition */
+            position: relative;
+            overflow: hidden;
+        }
+        .excellence-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        .excellence-card:hover::before {
+            opacity: 1;
+        }
+        .excellence-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.15);
+        }
+        .excellence-card-icon {
+            font-size: 3rem;
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        .excellence-card:hover .excellence-card-icon {
+            filter: drop-shadow(0 0 8px var(--gokwik-primary-orange)) drop-shadow(0 0 15px rgba(240,152,25,0.5));
+            transform: scale(1.1);
         }
         .excellence-card-title {
-            font-size: 1.5rem; /* Increased font size to 24px (1.5rem * 16px) */
-            font-weight: 700; /* Bold */
-            text-decoration: underline; /* Underline */
-            color: var(--gokwik-blue); /* Deep blue for titles */
-            margin-top: auto; /* Push title to bottom */
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+            margin-top: auto;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+        .excellence-card-description {
+            font-size: 0.95rem;
+            color: var(--text-accent-medium);
+            margin-top: 0.75rem;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Responsive adjustments for the cards */
-        @media (max-width: 768px) {
-            .excellence-card {
-                min-height: 180px;
-                padding: 1rem;
-            }
-            .excellence-card-image {
-                width: 80px;
-                height: 80px;
-                margin-bottom: 0.5rem;
-            }
-            .excellence-card-title {
-                font-size: 1.25rem; /* Adjust font size for smaller screens */
-            }
+        details summary {
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+            list-style: none;
+            position: relative;
+            padding-right: 2rem;
+            transition: color 0.2s ease;
+        }
+        details summary:hover {
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        details summary::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: transform 0.2s ease, color 0.2s ease;
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+        }
+        details[open] summary::after {
+            content: '-';
+            transform: translateY(-50%) rotate(0deg);
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+        }
+        details[open] summary {
+            color: var(--gokwik-primary-orange); /* Changed to orange */
         }
 
-        /* Styles for the Call to Action Buttons */
-        .cta-button {
-            @apply px-8 py-3 rounded-full text-lg font-bold transition-colors duration-300 shadow-md;
+        strong {
+            font-weight: 700;
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+        }
+
+        .section-heading-new {
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+            font-weight: 900;
+            letter-spacing: -0.025em;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .sub-heading-new {
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-value-box {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .metric-value-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .metric-value-box p {
+            color: var(--text-on-dark);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        .metric-value-box .text-gokwik-golden-text {
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+        }
+        .metric-value-box .text-green-300 {
+            color: #A3E6B8;
+        }
+        .trend-graph-placeholder {
+            width: 100%;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 220px;
-            border: none;
-        }
-        .cta-button-primary {
-            background-color: var(--gokwik-blue);
-            color: var(--white);
-            transition: background-color 0.3s ease;
-        }
-        .cta-button-primary:hover {
-            background-color: #153a70; /* Slightly darker blue on hover */
-        }
-        .cta-button-secondary {
-            background-color: var(--gokwik-golden); /* Golden yellow */
-            color: var(--gokwik-blue); /* Dark blue text on golden */
-            transition: background-color 0.3s ease;
-        }
-        .cta-button-secondary:hover {
-            background-color: #e6b800; /* Slightly darker golden on hover */
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1rem;
+            border: 1px dashed rgba(255, 255, 255, 0.4);
         }
 
-        /* General text color adjustments */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--text-dark);
+        /* AI Automation specific styles */
+        .ai-hero-section {
+            background: linear-gradient(135deg, var(--gokwik-primary-blue) 0%, var(--gokwik-blue-darker) 100%); /* Using new blue shades */
+            color: var(--text-on-dark);
+            padding: 8rem 2rem; /* More vertical padding from new content */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Stronger shadow from new content */
+            border-bottom-left-radius: 3rem; /* Rounded bottom corners from new content */
+            border-bottom-right-radius: 3rem;
+            animation: fadeInScale 1.5s ease-out forwards; /* Animation from new content */
+            margin-bottom: 4rem; /* Increased margin for separation from new content */
+            border-radius: 1.5rem; /* Existing border-radius */
         }
-        p, ul, li, span {
-            color: var(--text-medium);
+        @keyframes fadeInScale { /* From new AI content */
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
-        .text-gray-600, .text-gray-500 {
-            color: var(--text-medium);
+
+        .ai-hero-logo-text {
+            font-size: 5rem; /* Very large logo from new content */
+            font-weight: 900;
+            line-height: 1;
+            display: inline-block;
+            margin-bottom: 2rem; /* From new content */
+            animation: pulseGlow 3s infinite alternate ease-in-out; /* Animation from new content */
         }
-        .text-gray-900 {
-            color: var(--text-dark);
+        @keyframes pulseGlow { /* From new AI content */
+            0% { text-shadow: 0 0 5px rgba(255,255,255,0.5), 0 0 10px rgba(240,152,25,0.3); }
+            100% { text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 25px rgba(240,152,25,0.8); }
         }
-        .bg-gray-100 {
-            background-color: var(--medium-gray);
-        }
-        .bg-gray-50 {
-            background-color: var(--light-gray);
-        }
-        .bg-white {
+        .ai-hero-logo-text span:first-child { color: var(--text-on-dark); }
+        .ai-hero-logo-text span:last-child { color: var(--gokwik-primary-orange); } /* Changed to orange */
+
+        .ai-content-section {
             background-color: var(--white);
+            padding: 4rem 2rem; /* Consistent padding from new content */
+            margin-bottom: 2rem; /* Space between sections from new content */
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Stronger shadow from new content */
+            position: relative;
+            overflow: hidden;
         }
-        .border-gray-200 {
-            border-color: var(--medium-gray);
+
+        .ai-use-case-module {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem; /* Increased space from new content */
+            margin-bottom: 3rem; /* Space between modules from new content */
+            padding: 2rem; /* Internal padding from new content */
+            border-radius: 1.5rem;
+            background-color: var(--light-gray);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out; /* Slower, smoother transition from new content */
         }
-        .border-gray-100 {
-            border-color: var(--medium-gray);
+        .ai-use-case-module:hover {
+            transform: translateY(-8px); /* More pronounced hover from new content */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
-        .text-green-600 {
-            color: var(--accent-green);
+
+        .ai-use-case-module:nth-child(even) {
+            flex-direction: row-reverse;
         }
-        .text-red-600 {
-            color: var(--accent-red);
+
+        .ai-module-visual {
+            flex-shrink: 0;
+            width: 200px; /* Adjusted width from new content */
+            height: 200px; /* Adjusted height from new content */
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--gokwik-primary-blue), var(--gokwik-blue-light)); /* Stronger gradient from new content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Stronger shadow from new content */
+            position: relative;
+            animation: float 3s ease-in-out infinite alternate; /* Floating animation from new content */
+        }
+        @keyframes float { /* From new AI content */
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .ai-module-visual .icon-overlay {
+            font-size: 5rem; /* Larger icon from new content */
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+            opacity: 0.9;
+            text-shadow: 0 0 15px rgba(240,152,25,0.5); /* Stronger text shadow from new content */
+            transition: color 0.4s ease-out; /* Slower, smoother transition from new content */
+        }
+        .ai-use-case-module:hover .ai-module-visual .icon-overlay {
+            color: var(--text-on-dark);
+        }
+
+        .ai-module-content {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .ai-module-title {
+            font-size: 2rem; /* Larger title from new content */
+            font-weight: 900; /* Bolder font from new content */
+            color: var(--gokwik-primary-blue); /* Changed to blue */
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+        .ai-module-description {
+            font-size: 0.95rem; /* Smaller description for readability from new content */
+            color: var(--text-default); /* Changed to default text color */
+            line-height: 1.5;
+        }
+
+        .ai-conclusion-section {
+            background: linear-gradient(45deg, var(--gokwik-blue-darker) 0%, var(--gokwik-primary-blue) 100%); /* Using new blue shades */
+            color: var(--text-on-dark);
+            padding: 4rem 2rem; /* More vertical padding from new content */
+            text-align: center;
+            border-top-left-radius: 3rem; /* Rounded top corners from new content */
+            border-top-right-radius: 3rem;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.3); /* Stronger shadow from new content */
+            margin-top: 4rem; /* Increased margin from new content */
+        }
+        .ai-conclusion-section .section-heading-new { /* Using section-heading-new for consistency */
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+        }
+        .ai-conclusion-section ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem; /* From new content */
+            text-align: center;
+            display: inline-block;
+        }
+        .ai-conclusion-section li {
+            position: relative;
+            padding-left: 2rem; /* From new content */
+            margin-bottom: 1rem; /* From new content */
+            font-size: 1.1rem; /* From new content */
+            font-weight: 500;
+            text-align: left;
+        }
+        .ai-conclusion-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--gokwik-primary-orange); /* Changed to orange */
+            font-size: 1.5em; /* From new content */
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        .ai-footer-section { /* New footer for AI tab, based on new content's footer */
+            background-color: var(--gokwik-blue-darker);
+            color: var(--text-on-dark);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom-left-radius: 1.5rem; /* Match main container */
+            border-bottom-right-radius: 1.5rem; /* Match main container */
+        }
+        .ai-footer-logo-text { /* New logo text for AI tab footer */
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .ai-footer-logo-text span:first-child { color: var(--text-on-dark); }
+        .ai-footer-logo-text span:last-child { color: var(--gokwik-primary-orange); }
+
+
+        @media (max-width: 768px) {
+            .ai-hero-section {
+                padding: 6rem 1rem;
+                border-bottom-left-radius: 1.5rem;
+                border-bottom-right-radius: 1.5rem;
+            }
+            .ai-hero-logo-text {
+                font-size: 3.5rem;
+            }
+            .ai-hero-section h1 {
+                font-size: 2.5rem;
+            }
+            .ai-hero-section p {
+                font-size: 1rem;
+            }
+            .ai-content-section {
+                padding: 2.5rem 1rem;
+                border-radius: 1rem;
+            }
+            .ai-use-case-module {
+                flex-direction: column !important;
+                align-items: center;
+                text-align: center;
+                gap: 1.5rem;
+                padding: 1.5rem;
+                border-radius: 0.75rem;
+            }
+            .ai-module-visual {
+                width: 180px;
+                height: 150px;
+            }
+            .ai-module-visual .icon-overlay {
+                font-size: 3rem;
+            }
+            .ai-module-title {
+                font-size: 1.5rem;
+            }
+            .ai-module-description {
+                font-size: 0.95rem;
+            }
+            .ai-conclusion-section {
+                padding: 2.5rem 1rem;
+                border-top-left-radius: 1.5rem;
+                border-top-right-radius: 1.5rem;
+            }
+            .ai-conclusion-section li {
+                font-size: 1rem;
+                padding-left: 1.5rem;
+            }
+            .ai-footer-section {
+                padding: 1.5rem 1rem;
+                border-bottom-left-radius: 1rem;
+                border-bottom-right-radius: 1rem;
+            }
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .cta-button-primary {
+            background-color: var(--gokwik-primary-blue); /* Changed to blue */
+            color: var(--text-on-dark);
+        }
+        .cta-button-primary:hover {
+            background-color: var(--gokwik-blue-darker); /* Darker blue on hover */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .cta-button-secondary {
+            background-color: var(--gokwik-primary-orange); /* Changed to orange */
+            color: var(--gokwik-primary-blue); /* Blue text on orange */
+        }
+        .cta-button-secondary:hover {
+            background-color: #e6b800; /* Slightly darker orange on hover */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .gokwik-bg-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(17, 54, 101, 0.05); /* Using new blue with low opacity */
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            white-space: nowrap;
+            opacity: 0.1;
+            text-shadow: 0 0 20px rgba(240,152,25,0.05); /* Using new orange with low opacity */
+        }
+        .gokwik-bg-logo::before {
+            content: 'GoKwik';
+        }
+
+        /* Chart-specific styles for the new section */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width for charts */
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px; /* Increased height for charts to accommodate legend */
+            max-height: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px; /* Further increased on medium screens for legend */
+            }
+        }
+
+        /* Excellence Charter specific styles - Merged and adapted */
+        .excellence-header-logo-text { /* Renamed from .gokwik-logo-text in new content */
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1rem;
+            color: var(--gokwik-primary-blue); /* Use primary blue */
+        }
+        .excellence-header-logo-text span:last-child {
+            color: var(--gokwik-primary-orange); /* Use primary orange */
+        }
+
+        .excellence-section-heading { /* Renamed from .section-heading in new content */
+            color: var(--gokwik-primary-orange);
+            font-weight: 900;
+            letter-spacing: -0.025em;
+            text-align: center;
+            margin-bottom: 1.5rem; /* Ensure consistent spacing */
+        }
+
+        .excellence-sub-heading { /* Renamed from .sub-heading in new content */
+            color: var(--gokwik-primary-blue);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem; /* Ensure consistent spacing */
+        }
+
+        .excellence-group-card { /* From new content, now a distinct class */
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(17, 54, 101, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, opacity 0.6s ease-out;
+            opacity: 0; /* Initial state for fade-in */
+            transform: translateY(30px); /* Initial state for slide-up */
+        }
+        .excellence-group-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .excellence-group-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .excellence-card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .excellence-card {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 220px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0; /* Initial state for fade-in */
+            transform: translateY(30px); /* Initial state for slide-up */
+            position: relative;
+            overflow: hidden; /* For the subtle radial gradient */
+        }
+        .excellence-card::before { /* Subtle radial gradient on hover */
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        .excellence-card:hover::before {
+            opacity: 1;
+        }
+        .excellence-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .excellence-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.15);
+        }
+        .excellence-card-icon {
+            font-size: 3rem;
+            color: var(--gokwik-primary-orange);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease; /* Ensure smooth icon transition */
+        }
+        .excellence-card:hover .excellence-card-icon {
+            filter: drop-shadow(0 0 8px var(--gokwik-primary-orange)) drop-shadow(0 0 15px rgba(240,152,25,0.5));
+            transform: scale(1.1);
+        }
+        .excellence-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gokwik-primary-blue);
+            margin-top: auto;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+        .excellence-card-description {
+            font-size: 0.95rem;
+            color: var(--text-accent-medium); /* Used existing text-accent-medium */
+            margin-top: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .initiative-item-card {
+            background-color: var(--white);
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-default); /* Used existing text-default */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--medium-gray);
+            opacity: 0; /* Initial state for fade-in */
+            transform: translateY(30px); /* Initial state for slide-up */
+        }
+        .initiative-item-card.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .initiative-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .initiative-item-card .item-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .initiative-item-card.actioned .item-icon {
+            color: #28a745; /* Green for actioned */
+        }
+        .initiative-item-card.upcoming .item-icon {
+            color: var(--gokwik-primary-blue); /* Blue for upcoming */
+        }
+
+        .actioned-checkmark {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: #28a745; /* Green */
+            opacity: 0.8;
+            z-index: 1;
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* General bold text styling - adapted to use primary blue */
+        strong {
+            font-weight: 700;
+            color: var(--gokwik-primary-blue);
+        }
+
+        /* Responsive adjustments for Excellence Charter */
+        @media (max-width: 768px) {
+            .excellence-group-card {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+            .excellence-card-container {
+                grid-template-columns: 1fr; /* Stack cards on small screens */
+                gap: 1rem;
+            }
+            .excellence-card {
+                padding: 1.5rem;
+                min-height: auto;
+                border-radius: 1rem;
+            }
+            .excellence-card-icon {
+                font-size: 2.5rem;
+            }
+            .excellence-card-title {
+                font-size: 1.25rem;
+            }
+            .excellence-card-description {
+                font-size: 0.85rem;
+            }
+            .initiative-item-card {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            .initiative-item-card .item-icon {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Styles from CSM Onboarding HTML - Integrated and adapted */
+        .csm-onboarding-hero-header {
+            background: linear-gradient(135deg, var(--gokwik-primary-blue) 0%, var(--gokwik-primary-orange) 100%); /* Diagonal gradient */
+            padding: 4rem 2rem; /* More padding */
+            border-radius: 2rem; /* Even more rounded */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Deeper shadow */
+            animation: fadeInScale 1s ease-out forwards; /* Initial animation */
+        }
+        .csm-onboarding-gokwik-logo {
+            font-size: 3rem; /* Larger logo text */
+            font-weight: 900;
+            line-height: 1;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+        .csm-onboarding-gokwik-logo:hover {
+            transform: scale(1.05); /* Subtle pulse on hover */
+        }
+        .csm-onboarding-gokwik-logo span:first-child {
+            color: var(--gokwik-primary-blue);
+        }
+        .csm-onboarding-gokwik-logo span:last-child {
+            color: var(--gokwik-primary-orange);
+        }
+        .csm-onboarding-table-header {
+            background-color: var(--gokwik-primary-blue); /* Blue background for table headers */
+            color: var(--text-on-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1.125rem; /* Larger table headers */
+        }
+        .csm-onboarding-table-row:nth-child(odd) {
+            background-color: var(--light-gray); /* Light gray for odd rows */
+        }
+        .csm-onboarding-table-row:hover {
+            background-color: var(--medium-gray); /* Slightly darker on hover */
+        }
+        /* Ensure table padding and font sizes are consistent */
+        #csmOnboardingContent table th, #csmOnboardingContent table td {
+            padding: 1rem; /* More padding for table cells */
+        }
+        #csmOnboardingContent table thead th {
+            font-size: 1.125rem; /* Larger table headers */
+        }
+        #csmOnboardingContent table tbody td {
+            font-size: 0.95rem; /* Slightly smaller body text for tables */
         }
     </style>
 </head>
 <body>
-    <div class="max-w-6xl mx-auto bg-white rounded-xl card-shadow overflow-hidden relative">
-        <!-- Header Section -->
-        <div class="p-4 sm:p-6 text-center relative z-10">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gokwik-accent leading-tight mb-2">
-                Gokwik Success Showcase
+    <div id="mainContentPage" class="main-content-container">
+        <div class="main-header">
+            <div class="gokwik-logo-text"><span>Go</span><span>Kwik</span></div>
+            <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-2">
+                Success Showcase
             </h1>
-            <p class="text-sm leading-relaxed text-gray-600">
+            <p class="text-sm leading-relaxed opacity-90">
                 A comprehensive overview of your performance and key insights.
             </p>
         </div>
 
-        <!-- Gokwik Logo (Original, for clear branding) -->
-        <div class="flex justify-center p-2 relative z-10">
-            <img src="gokwik.logo.png" alt="Gokwik Logo" class="h-8 w-auto rounded-md">
-        </div>
-
-        <!-- Navigation Tabs -->
-        <div class="flex justify-center flex-wrap gap-3 p-4 border-b border-gray-200 relative z-10">
+        <div class="tab-nav-container">
             <button class="tab-button active" onclick="openTab('executiveSummary')">Executive Summary</button>
             <button class="tab-button" onclick="openTab('podOverlook')">POD Overlook</button>
-            <button class="tab-button" onclick="openTab('upsellOverview')">Upsell Overview</button>
+            <button class="tab-button" onclick="openTab('upsellOverview')">Upsell Overview</sbutton>
             <button class="tab-button" onclick="openTab('aiAutomations')">AI Automations</button>
             <button class="tab-button" onclick="openTab('excellenceCharter')">Excellence Charter</button>
             <button class="tab-button" onclick="openTab('npsInsights')">NPS Insights</button>
-            <!-- The dynamic draft tab button is hidden by default and shown only when a draft is opened -->
+            <!-- Removed Blind Spots Tab Button -->
             <button class="tab-button" id="draftContentTabButton" style="display:none;">Weekly Snapshot Draft</button>
         </div>
 
-        <!-- Tab Content Containers -->
-        <div id="executiveSummary" class="tab-content active p-6 sm:p-8 relative z-10">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Executive Summary</h2>
+        <div id="executiveSummary" class="tab-content active p-6 sm:p-8">
+            <h2 class="section-title">Executive Summary</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Logo Retention -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Logo Retention</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">15%</p>
-                    <p class="text-gray-500 text-sm mt-1">Compared to March</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Logo Retention</p>
+                    <p class="summary-metric">99.6%</p>
                 </div>
 
-                <!-- Revenue Expanded -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Revenue Expanded</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">22%</p>
-                    <p class="text-gray-500 text-sm mt-1">by</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Total Accounts</p>
+                    <p class="summary-metric">293</p>
                 </div>
 
-                <!-- Merchant Meetings -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Merchant Meetings</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">185</p>
-                    <p class="text-gray-500 text-sm mt-1">In Person</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Revenue expanded by expansion</p>
+                    <p class="summary-metric">10.8 Cr</p>
                 </div>
 
-                <!-- Main Challenge -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Main Challenge: Delayed Client Feedback on Project</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">85%</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Merchant Meetings</p>
+                    <p class="summary-metric">185</p>
+                    <p class="summary-label">In Person</p>
                 </div>
 
-                <!-- Total Registered Users -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Total Registered Users</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">>500 M</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Total ARR</p>
+                    <p class="summary-metric">74 Cr</p>
                 </div>
 
-                <!-- Partners Revenue -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-600 text-sm font-medium mb-2">Partners Revenue</p>
-                    <p class="text-gokwik-dark text-4xl font-extrabold leading-none">$123M</p>
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Unlive</p>
+                    <p class="summary-metric">1</p>
+                </div>
+
+                <div class="card flex flex-col items-center justify-center text-center">
+                    <p class="summary-label">Relive</p>
+                    <p class="summary-metric">3</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Monthly Highlights Text -->
+            <!-- Replaced Monthly Highlights (AMJ 25) with new content -->
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <div class="bg-gray-50 rounded-lg p-6 card-shadow">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-3">Monthly Highlights</h4>
-                    <p class="text-sm text-gray-700 mb-4">
-                        The Monthly Highlights section is a brief and concise summary of the most important points from the entire monthly report. Its purpose is to give your audience a quick overview of key achievements, metrics, and challenges without needing to dive into all the data just yet.
-                    </p>
-                </div>
-                <!-- What it typically includes moved here -->
-                <div class="bg-gray-50 rounded-lg p-6 card-shadow">
-                    <h5 class="text-base font-semibold text-gray-800 mb-2">What it typically includes:</h5>
-                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
-                        <li>Performance growth or decline (e.g., revenue increased by 15%)</li>
-                        <li>Major accomplishments or milestones (e.g., completed big client projects)</li>
-                        <li>A hint of what's coming next month</li>
-                    </ul>
+                    <header class="text-center mb-8">
+                        <h1 class="text-3xl font-extrabold text-gokwik-blue mb-4 rounded-lg p-2 shadow-sm bg-white">Q2 Merchant Success: Driving Growth & Addressing Challenges</h1>
+                        <p class="text-base text-gray-600 max-w-3xl mx-auto">
+                            The second quarter (April-June) for Merchant Success has been marked by significant growth in Annual Recurring Revenue (ARR) driven by successful upsells and strategic integrations, particularly within the mobile app ecosystem. While the team demonstrated strong capabilities in de-risking and reviving certain accounts, challenges persisted in key areas such as product stability, data accuracy, and competitive pressures.
+                        </p>
+                    </header>
+
+                    <!-- Key Wins & ARR Growth Section -->
+                    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6 text-center flex flex-col justify-center items-center">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Upsell ARR from Existing Brands</h2>
+                            <p class="text-5xl font-bold text-gokwik-primary-orange">₹7 Cr</p>
+                            <p class="text-base text-gray-500 mt-2">Through app checkout & cross-brand sales</p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md p-6 text-center flex flex-col justify-center items-center">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">New Integration ARR (Thrive Co.)</h2>
+                            <p class="text-5xl font-bold text-gokwik-blue">₹80 Lakh</p>
+                            <p class="text-base text-gray-500 mt-2">Unlocking significant revenue from GNC group</p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md p-6 text-center flex flex-col justify-center items-center">
+                            <h2 class="text-lg font-semibold text-gray-700 mb-2">Total Mobile App ARR Unlocked</h2>
+                            <p class="text-5xl font-bold text-gokwik-primary-orange">₹4.5 Cr+</p>
+                            <p class="text-base text-gray-500 mt-2">With another ₹3 Cr in the pipeline</p>
+                        </div>
+                    </section>
+
+                    <!-- GNC Group Breakdown Chart Section -->
+                    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                        <h2 class="text-xl font-bold text-gokwik-blue mb-4 text-center">GNC Group Collective ARR Breakdown</h2>
+                        <p class="text-base text-gray-600 mb-6 text-center">
+                            The GNC group has been a significant contributor to our ARR growth, with a collective unlock of ₹1.5 Crores. This donut chart illustrates the individual contributions from key brands within this group.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="gncArrChart"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Mobile App Impact Section -->
+                    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                        <h2 class="text-xl font-bold text-gokwik-primary-orange mb-4 text-center">Strategic Focus: Mobile App Momentum</h2>
+                        <p class="text-base text-gray-600 mb-6 text-center">
+                            A clear and significant trend is the increasing prioritization of mobile apps by brands. GoKwik's mobile app initiatives have directly contributed to substantial ARR, underscoring its importance in our growth strategy.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-3">Key Brands Live on Mobile App</h3>
+                                <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                    <li class="flex items-center"><span class="text-gokwik-primary-orange mr-2 text-xl">&#x2713;</span>Organic Bazaar</li>
+                                    <li class="flex items-center"><span class="text-gokwik-primary-orange mr-2 text-xl">&#x2713;</span>Libas</li>
+                                    <li class="flex items-center"><span class="text-gokwik-primary-orange mr-2 text-xl">&#x2713;</span>Plix</li>
+                                    <li class="flex items-center"><span class="text-gokwik-primary-orange mr-2 text-xl">&#x2713;</span>Zeraki Jewels</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-3">Mobile App Strategic Impact</h3>
+                                <p class="text-base text-gray-600 mb-2">
+                                    The successful addition of these brands going live on the mobile app highlights the effectiveness of our mobile-first approach and its direct contribution to ARR unlock.
+                                </p>
+                                <p class="text-base text-gray-600">
+                                    This focus helps us meet evolving merchant needs and capture significant market share in the mobile commerce space.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Challenges & Focus Areas Section -->
+                    <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                        <h2 class="text-xl font-bold text-gokwik-blue mb-4 text-center">Persistent Challenges & Strategic Focus Areas</h2>
+                        <p class="text-base text-gray-600 mb-6 text-center">
+                            While celebrating our wins, it's crucial to acknowledge areas requiring continuous improvement to mitigate churn risks and enhance overall merchant satisfaction.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-lg shadow-sm">
+                                <span class="text-4xl text-gokwik-primary-orange mb-2">&#x26A0;&#xFE0F;</span>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Tech Stability</h3>
+                                <p class="text-sm text-gray-500">Ensuring robust and reliable platform performance.</p>
+                            </div>
+                            <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-lg shadow-sm">
+                                <span class="text-4xl text-gokwik-blue mb-2">&#x1F50D;</span>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Trust Mis-managed</h3>
+                                <p class="text-sm text-gray-500">Improving the precision of financial and operational data.</p>
+                            </div>
+                            <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-lg shadow-sm">
+                                <span class="text-4xl text-gokwik-primary-orange mb-2">&#x1F4AA;</span>
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Competitive Pressures</h3>
+                                <p class="text-sm text-gray-500">Maintaining our edge in a dynamic market.</p>
+                            </div>
+                        </div>
+                        <p class="text-base text-gray-600 mt-6 text-center">
+                            Proactive engagement and responsiveness remain critical to mitigating churn risks and enhancing merchant satisfaction.
+                        </p>
+                    </section>
+
+                    <!-- Conclusion Section for this new section -->
+                    <footer class="text-center pt-8 pb-4">
+                        <p class="text-base text-gray-600">
+                            This quarter's performance highlights our team's dedication and the significant opportunities ahead. By addressing our challenges with strategic focus, we are poised for continued success and deeper merchant partnerships.
+                        </p>
+                    </footer>
                 </div>
             </div>
         </div>
 
         <div id="podOverlook" class="tab-content p-6 sm:p-8 relative z-10">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">POD Overlook ~ 75 Cr</h2>
+            <h2 class="section-title">POD Overlook ~ 75 Cr</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Changed to grid-cols-1 for vertical stacking -->
+            <div class="grid grid-cols-1 gap-8">
                 <!-- Sherman POD -->
-                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col">
+                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col animate-card" style="animation-delay: 0.1s;">
                     <h4 class="text-lg font-semibold text-gray-900 mb-2">Sherman - 35.4 Cr</h4>
                     <p class="text-sm text-gray-600 mb-4">Custom + Shopify (Rest of India)</p>
                     <div class="pod-legend">
@@ -457,51 +1281,58 @@
                     <div class="flex-grow pod-chart-container">
                         <!-- Bar for Adarsh -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">7.91</span>
-                            <div class="pod-bar" style="height: calc((7.91 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-adarsh);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-adarsh); --bar-end-color: #8bb8e8; --bar-height: calc((7.91 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">7.91</span>
+                            </div>
                             <span class="pod-bar-label">Adarsh</span>
                         </div>
                         <!-- Bar for Venkat -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">8.84</span>
-                            <div class="pod-bar" style="height: calc((8.84 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-venkat);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-venkat); --bar-end-color: #e6c200; --bar-height: calc((8.84 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">8.84</span>
+                            </div>
                             <span class="pod-bar-label">Venkat</span>
                         </div>
                         <!-- Bar for Anjali -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">2.60</span>
-                            <div class="pod-bar" style="height: calc((2.60 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-anjali);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-anjali); --bar-end-color: #b091b0; --bar-height: calc((2.60 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">2.60</span>
+                            </div>
                             <span class="pod-bar-label">Anjali</span>
                         </div>
                         <!-- Bar for Deep -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">6.12</span>
-                            <div class="pod-bar" style="height: calc((6.12 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-deep);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-deep); --bar-end-color: #00a8a8; --bar-height: calc((6.12 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">6.12</span>
+                            </div>
                             <span class="pod-bar-label">Deep</span>
                         </div>
                         <!-- Bar for Vishal -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">0.00</span>
-                            <div class="pod-bar" style="height: calc((0.00 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-vishal);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-vishal); --bar-end-color: #d0d0d0; --bar-height: calc((0.00 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">0.00</span>
+                            </div>
                             <span class="pod-bar-label">Vishal</span>
                         </div>
                         <!-- Bar for Mayur -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">0.00</span>
-                            <div class="pod-bar" style="height: calc((0.00 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-mayur);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-mayur); --bar-end-color: #d0d0d0; --bar-height: calc((0.00 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">0.00</span>
+                            </div>
                             <span class="pod-bar-label">Mayur</span>
                         </div>
                         <!-- Bar for Sherman Total (assuming 10.00 is a max or total representation) -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">10.00</span>
-                            <div class="pod-bar" style="height: calc((10.00 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sherman-total);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sherman-total); --bar-end-color: #b091b0; --bar-height: calc((10.00 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">10.00</span>
+                            </div>
                             <span class="pod-bar-label">Sherman</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Hardik POD -->
-                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col">
+                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col animate-card" style="animation-delay: 0.2s;">
                     <h4 class="text-lg font-semibold text-gray-900 mb-2">Hardik - 21.6 Cr</h4>
                     <p class="text-sm text-gray-600 mb-4">Shopify NCR + Fixer</p>
                     <div class="pod-legend">
@@ -514,39 +1345,44 @@
                     <div class="flex-grow pod-chart-container">
                         <!-- Bar for Jiten -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">5.96</span>
-                            <div class="pod-bar" style="height: calc((5.96 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-hardik-jiten);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-hardik-jiten); --bar-end-color: #8bb8e8; --bar-height: calc((5.96 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">5.96</span>
+                            </div>
                             <span class="pod-bar-label">Jiten</span>
                         </div>
                         <!-- Bar for Atul -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">4.69</span>
-                            <div class="pod-bar" style="height: calc((4.69 / var(--pod-max-value)) * 100%); background-color: var(--pod-hardik-atul);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-hardik-atul); --bar-end-color: #e6c200; --bar-height: calc((4.69 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">4.69</span>
+                            </div>
                             <span class="pod-bar-label">Atul</span>
                         </div>
                         <!-- Bar for Manisha -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">4.10</span>
-                            <div class="pod-bar" style="height: calc((4.10 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-hardik-manisha);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-hardik-manisha); --bar-end-color: #b091b0; --bar-height: calc((4.10 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">4.10</span>
+                            </div>
                             <span class="pod-bar-label">Manisha</span>
                         </div>
                         <!-- Bar for Devika -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">2.97</span>
-                            <div class="pod-bar" style="height: calc((2.97 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-hardik-devika);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-hardik-devika); --bar-end-color: #8ba8d0; --bar-height: calc((2.97 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">2.97</span>
+                            </div>
                             <span class="pod-bar-label">Devika</span>
                         </div>
                         <!-- Bar for Hardik Total (assuming 6.00 is a max or total representation) -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">3.8</span>
-                            <div class="pod-bar" style="height: calc((3.8 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-hardik-total);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-hardik-total); --bar-end-color: #8ba8d0; --bar-height: calc((3.8 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">3.8</span>
+                            </div>
                             <span class="pod-bar-label">Hardik</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Ankit POD -->
-                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col">
+                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col animate-card" style="animation-delay: 0.3s;">
                     <h4 class="text-lg font-semibold text-gray-900 mb-2">Ankit - 6.3 Cr</h4>
                     <p class="text-sm text-gray-600 mb-4">Custom + Shopify NCR</p>
                     <div class="pod-legend">
@@ -556,21 +1392,23 @@
                     <div class="flex-grow pod-chart-container">
                         <!-- Bar for Ankit -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">5.04</span>
-                            <div class="pod-bar" style="height: calc((5.04 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-ankit-ankit);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-ankit-ankit); --bar-end-color: #8bb8e8; --bar-height: calc((5.04 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">5.04</span>
+                            </div>
                             <span class="pod-bar-label">Ankit</span>
                         </div>
                         <!-- Bar for Sakshi -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">1.15</span>
-                            <div class="pod-bar" style="height: calc((1.15 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-ankit-sakshi);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-ankit-sakshi); --bar-end-color: #e6c200; --bar-height: calc((1.15 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">1.15</span>
+                            </div>
                             <span class="pod-bar-label">Sakshi</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sujit POD -->
-                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col">
+                <div class="bg-gray-100 rounded-xl p-4 card-shadow flex flex-col animate-card" style="animation-delay: 0.4s;">
                     <h4 class="text-lg font-semibold text-gray-900 mb-2">Sujit - 10.4 Cr</h4>
                     <p class="text-sm text-gray-600 mb-4">Shopify ENT + SMB</p>
                     <div class="pod-legend">
@@ -579,8 +1417,9 @@
                     <div class="flex-grow pod-chart-container">
                         <!-- Bar for Sujit -->
                         <div class="pod-bar-wrapper">
-                            <span class="pod-bar-value">10.4</span>
-                            <div class="pod-bar" style="height: calc((10.4 / var(--pod-max-value)) * 100%); background-color: var(--pod-color-sujit-sujit);"></div>
+                            <div class="pod-bar" style="--bar-start-color: var(--pod-color-sujit-sujit); --bar-end-color: #e6c200; --bar-height: calc((10.4 / var(--pod-max-value)) * 100%);">
+                                <span class="pod-bar-value-display">10.4</span>
+                            </div>
                             <span class="pod-bar-label">Sujit</span>
                         </div>
                     </div>
@@ -589,11 +1428,11 @@
         </div>
 
         <div id="upsellOverview" class="tab-content p-6 sm:p-8 relative z-10">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Upsell/Cross-sell Overview</h2>
+            <h2 class="section-title">Upsell/Cross-sell Overview</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Upsell/Cross-sell List -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col justify-center">
+                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col justify-center animate-card" style="animation-delay: 0.1s;">
                     <div class="space-y-4">
                         <div class="bg-white rounded-lg p-3 text-center text-gokwik-dark-text font-medium text-lg card-shadow">
                             Kwikcart live - 45 logos
@@ -611,7 +1450,7 @@
                 </div>
 
                 <!-- ARR Expansion Pie Chart -->
-                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center">
+                <div class="bg-gray-100 rounded-xl p-6 card-shadow flex flex-col items-center justify-center animate-card" style="animation-delay: 0.2s;">
                     <h4 class="text-lg font-semibold text-gray-900 mb-4">ARR expansion - 10.049 Cr.</h4>
                     <div class="pie-chart-container">
                         <!-- Slices are drawn using CSS conic-gradient or multiple div rotations -->
@@ -622,6 +1461,11 @@
                             var(--pie-color-3) 87.9% 96.7%, /* Merchant reneg/COD unlock */
                             var(--pie-color-4) 96.7% 100% /* Checkout upsell */
                         );"></div>
+                        <!-- Hover Overlay for ARR -->
+                        <div class="pie-chart-hover-overlay">
+                            <p class="text-white text-3xl font-bold">10.049 Cr</p>
+                            <p class="text-white text-sm">ARR Expansion</p>
+                        </div>
                     </div>
                     <p class="text-base font-semibold text-gray-800 mt-6 mb-3">Key drivers of ARR expansion</p>
                     <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-700">
@@ -636,103 +1480,464 @@
 
         <!-- New Tab: AI Automations -->
         <div id="aiAutomations" class="tab-content p-6 sm:p-8 relative z-10">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">AI Automations</h2>
-            <div class="bg-gray-50 rounded-lg p-6 card-shadow text-gray-700">
-                <p class="text-lg font-semibold mb-3">Leveraging AI for Enhanced Efficiency</p>
-                <p class="mb-4">
-                    Our AI-powered automations are designed to streamline operations, reduce manual effort, and enhance decision-making across various aspects of your business. By integrating advanced machine learning models, we aim to provide intelligent solutions that adapt and learn from your data.
-                </p>
-                <h4 class="text-base font-semibold text-gray-800 mb-2">Key Areas of AI Automation:</h4>
-                <ul class="list-disc list-inside text-sm space-y-2">
-                    <li>Smart Fraud Detection: Proactive identification and prevention of fraudulent transactions, minimizing losses and improving security.</li>
-                    <li>Personalized Customer Engagement: AI-driven recommendations and communication strategies to enhance customer experience and loyalty.</li>
-                    <li>Automated Order Processing: Efficient handling of order fulfillment, from inventory management to shipping logistics, reducing processing times.</li>
-                    <li>Predictive Analytics for Inventory: Forecasting demand to optimize stock levels, prevent stockouts, and reduce carrying costs.</li>
-                    <li>Dynamic Pricing Optimization: Real-time price adjustments based on market conditions, competitor analysis, and demand patterns to maximize revenue.</li>
+            <!-- Hero Section -->
+            <section class="ai-hero-section animated-section">
+                <div class="ai-hero-logo-text"><span>Go</span><span>Kwik</span></div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">AI in Merchant Success</h1>
+                <p class="text-xl sm:text-2xl font-light opacity-90 max-w-3xl mx-auto">Unlocking Next-Gen Efficiency & Merchant Value</p>
+                <p class="text-lg font-light opacity-80 mt-4 max-w-2xl mx-auto">Strategic AI Integration Across the Merchant Journey</p>
+            </section>
+
+            <!-- Introduction Section -->
+            <section class="ai-content-section animated-section">
+                <h2 class="text-2xl sm:text-3xl section-heading-new mb-6 text-center">Overview: Strategic AI Integration</h2>
+                <div class="text-lg leading-relaxed text-center max-w-3xl mx-auto text-gray-700">
+                    <p class="mb-4">The GoKwik Merchant Success (MS) team strategically integrates cutting-edge AI tools to transform operations and boost merchant satisfaction. Our core goal: empower CSMs as proactive, data-driven partners.</p>
+                    <p>AI use cases heavily concentrate in the "Post Go Live" phase, optimizing relationship management and ensuring consistent value delivery. This positions AI as a critical enabler for long-term merchant retention and growth.</p>
+                </div>
+            </section>
+
+            <!-- AI Use Cases Section -->
+            <section class="ai-content-section animated-section">
+                <h2 class="text-2xl sm:text-3xl section-heading-new mb-8 text-center">AI: Driving Impact & Efficiency</h2>
+
+                <!-- Data Analysis Module -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-chart-line icon-overlay"></i>
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Data Analysis</h3>
+                        <p class="ai-module-description">AI analyzes data & context for critical trends and actionable insights. It transforms raw data into intelligence, enabling smarter decisions.</p>
+                    </div>
+                </div>
+
+                <!-- Email Communication Module -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-envelope icon-overlay"></i>
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Email Communication</h3>
+                        <p class="ai-module-description">Streamlines external communication by drafting professional merchant emails. Ensures clarity, consistency, and efficiency in correspondence.</p>
+                    </div>
+                </div>
+
+                <!-- Meeting Management Module -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-clipboard-check icon-overlay"></i>
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Meeting Management</h3>
+                        <p class="ai-module-description">Automates Minutes of Meeting (MoM) creation and task follow-ups from meeting context and recordings, significantly improving accountability.</p>
+                    </div>
+                </div>
+
+                <!-- Chat Analysis Module -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-comments icon-overlay"></i>
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Chat Analysis</h3>
+                        <p class="ai-module-description">Processes chat transcripts to quickly identify insights and open issues. Enhances responsiveness for high interaction volumes, improving problem resolution.</p>
+                    </div>
+                </div>
+
+                <!-- Value Showcase Module -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-hand-holding-usd icon-overlay"></i>
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Value Showcase</h3>
+                        <p class="ai-module-description">Analyzes merchant data to define North Star metrics, visually presenting realized value. Effectively communicates success stories to partners.</p>
+                    </div>
+                </div>
+
+                <!-- Granola Module (Replaced Merchant Management at Scale) -->
+                <div class="ai-use-case-module animated-section">
+                    <div class="ai-module-visual">
+                        <i class="fas fa-seedling icon-overlay"></i> <!-- Using a seedling icon for 'Granola' -->
+                    </div>
+                    <div class="ai-module-content">
+                        <h3 class="ai-module-title">Granola</h3>
+                        <p class="ai-module-description">Granola is a new tool we'll be adopting to streamline data aggregation and provide comprehensive, actionable insights for merchant success.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Strategic Imperative Conclusion Section -->
+            <section class="ai-conclusion-section animated-section">
+                <h2 class="text-3xl sm:text-4xl section-heading-new mb-8">The Strategic Imperative</h2>
+                <ul class="max-w-3xl mx-auto">
+                    <li class="animated-section">AI empowers CSMs by automating routine tasks, enabling focus on strategic thinking and deeper merchant relationships.</li>
+                    <li class="animated-section">This shifts the team from reactive support to proactive, insight-driven engagement.</li>
+                    <li class="animated-section">Adopting these advanced technologies positions GoKwik's Merchant Success at the forefront of customer management, leveraging AI for competitive advantage, enhanced merchant satisfaction, and optimized operational outputs.</li>
                 </ul>
-                <p class="mt-4">
-                    These automations are continuously refined to ensure maximum impact and seamless integration with your existing workflows.
-                </p>
-            </div>
+            </section>
+
+            <!-- Footer for AI section -->
+            <footer class="ai-footer-section">
+                <div class="ai-footer-logo-text"><span>Go</span><span>Kwik</span></div>
+                <p class="text-sm opacity-80 mt-2">Empowering Merchants. Driving Success.</p>
+            </footer>
         </div>
 
         <!-- New Tab: Excellence Charter -->
         <div id="excellenceCharter" class="tab-content p-6 sm:p-8 relative z-10">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Excellence Charter</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Fixer Card -->
-                <div class="excellence-card bg-excellence-fixer">
-                    <div class="excellence-card-image">
-                        <!-- SVG for Fixer (abstract shapes/gears) -->
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="40" fill="var(--gokwik-blue)" stroke="var(--gokwik-blue)" stroke-width="2"/>
-                            <circle cx="50" cy="50" r="20" fill="var(--gokwik-golden)"/>
-                            <rect x="45" y="10" width="10" height="20" fill="var(--text-dark)"/>
-                            <rect x="45" y="70" width="10" height="20" fill="var(--text-dark)"/>
-                            <rect x="10" y="45" width="20" height="10" fill="var(--text-dark)"/>
-                            <rect x="70" y="45" width="20" height="10" fill="var(--text-dark)"/>
-                        </svg>
+            <!-- Back button for sub-content within Excellence Charter -->
+            <button id="backToExcellenceMainButton" class="hidden cta-button cta-button-primary mb-6" onclick="backToExcellenceMain()">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Excellence Charter
+            </button>
+
+            <!-- Main Excellence Charter Content -->
+            <div id="excellenceMainContent" class="excellence-sub-content">
+                <!-- Header for Standalone Page (adapted to be within the tab) -->
+                <header class="text-center bg-gradient-to-r from-[var(--gokwik-primary-blue)] to-[var(--gokwik-primary-orange)] text-white p-8 sm:p-12 rounded-2xl shadow-xl mb-12 animated-section">
+                    <div class="excellence-header-logo-text mb-4"><span>Go</span><span>Kwik</span></div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 text-white">GoKwik Success Excellence Charter</h1>
+                    <p class="text-xl sm:text-2xl font-light mb-6 text-white opacity-90">Our commitment to proactive excellence for sustained merchant growth and operational mastery.</p>
+                </header>
+
+                <!-- Introduction / Executive Summary (Optional for standalone, but included for context) -->
+                <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                    <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-4 text-center">Our Vision for Excellence</h2>
+                    <p class="text-base sm:text-lg leading-relaxed text-center max-w-3xl mx-auto text-gray-700">
+                        This charter outlines our strategic initiatives designed to go beyond the daily Business As Usual (BAU) engagement. Our goal is to proactively enhance our working style, optimize our outputs, and significantly improve efficiency across the Merchant Success team at GoKwik. These efforts are directly geared towards maximizing merchant delight, fostering deeper partnerships, and contributing measurably to GoKwik's overarching growth objectives. This is about driving strategic, measurable improvements across the entire merchant lifecycle.
+                    </p>
+                </section>
+
+                <!-- Excellence Charter Content -->
+                <section class="mb-12">
+                    <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-6 text-center">Actioned Initiatives</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+                        <!-- Actioned Initiatives - Major Cards -->
+                        <div class="excellence-group-card animated-section">
+                            <h3 class="text-xl excellence-sub-heading mb-4 text-center">Key Actioned Initiatives</h3>
+                            <div class="excellence-card-container">
+                                <div class="excellence-card animated-section" onclick="openExcellenceSubTab('csmOnboardingContent')">
+                                    <i class="fas fa-check-circle actioned-checkmark"></i>
+                                    <i class="fas fa-user-plus excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">CSM Onboarding</h4>
+                                    <p class="excellence-card-description">Reduce employee onboarding time to 2 weeks (from 4 weeks).</p>
+                                </div>
+                                <div class="excellence-card animated-section" onclick="openTab('npsInsights')">
+                                    <i class="fas fa-check-circle actioned-checkmark"></i>
+                                    <i class="fas fa-bullhorn excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">NPS Results Publish</h4>
+                                    <p class="excellence-card-description">Enable timely communication of merchant concerns for rapid action and de-risking.</p>
+                                </div>
+                                <div class="excellence-card animated-section">
+                                    <i class="fas fa-bank excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">Bank Offer Onboarding</h4>
+                                    <p class="excellence-card-description">Drive monetization through successful bank offer onboarding.</p>
+                                </div>
+                                <div class="excellence-card animated-section">
+                                    <i class="fas fa-check-circle actioned-checkmark"></i>
+                                    <i class="fas fa-link excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">Relations Fixer</h4>
+                                    <p class="excellence-card-description">Establish deeper merchant connections to unlock higher ARR and improve retention.</p>
+                                </div>
+                                <div class="excellence-card animated-section">
+                                    <i class="fas fa-check-circle actioned-checkmark"></i>
+                                    <i class="fas fa-envelope excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">Monthly Merchant Insights Email</h4>
+                                    <p class="excellence-card-description">Send monthly emails detailing D2C store performance and trends for actionable insights.</p>
+                                </div>
+                                <div class="excellence-card animated-section" onclick="window.open('https://app.presentations.ai/view/WOJ3lP', '_blank')">
+                                    <i class="fas fa-check-circle actioned-checkmark"></i>
+                                    <i class="fas fa-robot excellence-card-icon"></i>
+                                    <h4 class="excellence-card-title">EiDa + Periskope</h4>
+                                    <p class="excellence-card-description">Achieve human-free L1, product, finance query resolution via EiDa; manage merchant communications at scale with Periskope.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other Actioned Initiatives - List Only, side-by-side -->
+                        <div class="excellence-group-card animated-section">
+                            <h3 class="text-xl excellence-sub-heading mb-4 text-center">Other Actioned Initiatives</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3 text-base sm:text-lg leading-relaxed px-4">
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Merchant Progression
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> MDAPP
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Success Introspection
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> NPS (Post Migration & 12 Month)
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> AWB Cred Updates
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Contract Renewal (Auto-Renew)
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Success Phase Email
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Churn Tracker
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Townhall MS
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> Success Showcase with CT
+                                </div>
+                                <div class="initiative-item-card actioned animated-section">
+                                    <i class="fas fa-check-circle item-icon"></i> PA/PG Onboarding
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="excellence-card-title">Fixer</p>
-                </div>
 
-                <!-- Training Wheels Card -->
-                <div class="excellence-card bg-excellence-training">
-                    <div class="excellence-card-image">
-                        <!-- SVG for Training Wheels (graph and magnifying glass) -->
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Graph bars -->
-                            <rect x="15" y="50" width="15" height="30" fill="var(--gokwik-blue)"/>
-                            <rect x="35" y="30" width="15" height="50" fill="var(--gokwik-golden)"/>
-                            <rect x="55" y="60" width="15" height="20" fill="var(--gokwik-blue)"/>
-                            <!-- Magnifying glass -->
-                            <circle cx="70" cy="30" r="20" stroke="var(--text-dark)" stroke-width="4" fill="none"/>
-                            <line x1="85" y1="45" x2="95" y2="55" stroke="var(--text-dark)" stroke-width="4"/>
-                        </svg>
+                    <h2 class="text-2xl sm:text-3xl excellence-section-heading mt-12 mb-6 text-center">Upcoming Initiatives</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+                        <!-- Upcoming Initiatives - List Only -->
+                        <div class="excellence-group-card animated-section">
+                            <h3 class="text-xl excellence-sub-heading mb-4 text-center">Upcoming Initiatives (Yet to be Actioned)</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3 text-base sm:text-lg leading-relaxed px-4">
+                                <div class="initiative-item-card upcoming animated-section">
+                                    <i class="fas fa-hourglass-half item-icon"></i> Pre-MDAP Call
+                                </div>
+                                <div class="initiative-item-card upcoming animated-section">
+                                    <i class="fas fa-hourglass-half item-icon"></i> Control Tower Practices
+                                </div>
+                                <div class="initiative-item-card upcoming animated-section">
+                                    <i class="fas fa-hourglass-half item-icon"></i> Data Accesses & Legal Documentation
+                                </div>
+                                <div class="initiative-item-card upcoming animated-section">
+                                    <i class="fas fa-hourglass-half item-icon"></i> Merchant Milestone Rewards
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="excellence-card-title">Training Wheels</p>
-                </div>
+                </section>
 
-                <!-- Weekly Snapshot Card (Now clickable) -->
-                <div class="excellence-card bg-excellence-snapshot" onclick="openDraftContent('weeklySnapshotContent')">
-                    <div class="excellence-card-image">
-                        <!-- SVG for Weekly Snapshot (person and screen) -->
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Person -->
-                            <circle cx="30" cy="40" r="20" fill="var(--gokwik-blue)"/>
-                            <rect x="20" y="55" width="20" height="30" fill="var(--gokwik-golden)" rx="5"/>
-                            <!-- Screen -->
-                            <rect x="50" y="20" width="40" height="60" rx="5" fill="var(--white)"/>
-                            <rect x="55" y="25" width="30" height="5" fill="var(--medium-gray)"/>
-                            <rect x="55" y="35" width="20" height="5" fill="var(--medium-gray)"/>
-                            <rect x="55" y="45" width="10" height="5" fill="var(--medium-gray)"/>
-                        </svg>
-                    </div>
-                    <p class="excellence-card-title">Weekly Snapshot</p>
-                </div>
+                <!-- Footer / Branding for standalone page (adapted to be within the tab) -->
+                <footer class="text-center py-8 animated-section bg-gokwik-blue-darker text-white rounded-b-2xl">
+                    <div class="excellence-header-logo-text mb-2"><span>Go</span><span>Kwik</span></div>
+                    <p class="text-sm opacity-80 text-white">Empowering Merchants. Driving Success.</p>
+                </footer>
+            </div>
 
-                <!-- Monitor Communication Efficacy Card -->
-                <div class="excellence-card bg-excellence-communication">
-                    <div class="excellence-card-image">
-                        <!-- SVG for Monitor Communication Efficacy (megaphone and bubbles) -->
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Megaphone -->
-                            <path d="M70 25 L85 35 L70 45 L70 25 Z" fill="var(--gokwik-blue)"/>
-                            <rect x="55" y="30" width="15" height="10" fill="var(--gokwik-golden)"/>
-                            <circle cx="55" cy="35" r="7" fill="var(--gokwik-blue)"/>
+            <!-- CSM Onboarding Sub-Content -->
+            <div id="csmOnboardingContent" class="excellence-sub-content hidden p-4 sm:p-6 lg:p-8">
+                <div class="container mx-auto">
+                    <!-- Hero Section -->
+                    <header class="text-center csm-onboarding-hero-header mb-12">
+                        <div class="csm-onboarding-gokwik-logo mb-4"><span>Go</span><span>Kwik</span></div>
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 text-white">Redefining Onboarding for Merchant Success</h1>
+                        <p class="text-xl sm:text-2xl font-light mb-6 text-white">From overwhelm to clarity: 4 weeks &rarr; 2 weeks</p>
+                        <p class="text-lg sm:text-xl max-w-3xl mx-auto text-white opacity-90">A streamlined approach to empower our CSMs and elevate merchant partnerships, driving measurable impact.</p>
+                    </header>
 
-                            <!-- Speech Bubbles -->
-                            <circle cx="30" cy="50" r="10" fill="var(--white)"/>
-                            <path d="M40 60 A10 10 0 0 1 30 70 L25 75 L35 65 Z" fill="var(--white)"/>
+                    <!-- Introduction / Executive Summary -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-4 text-center">Our Vision for Excellence</h2>
+                        <p class="text-base sm:text-lg leading-relaxed text-center max-w-3xl mx-auto text-gray-700">
+                            This charter outlines our strategic initiatives designed to go beyond the daily Business As Usual (BAU) engagement. Our goal is to proactively enhance our working style, optimize our outputs, and significantly improve efficiency across the Merchant Success team at GoKwik. These efforts are directly geared towards maximizing merchant delight, fostering deeper partnerships, and contributing measurably to GoKwik's overarching growth objectives. This is about driving strategic, measurable improvements across the entire merchant lifecycle.
+                        </p>
+                    </section>
 
-                            <circle cx="50" cy="70" r="8" fill="var(--white)"/>
-                            <path d="M58 78 A8 8 0 0 1 50 86 L47 90 L55 80 Z" fill="var(--white)"/>
+                    <!-- Before vs. After Section -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-6 text-center">Before vs. After: A Transformative Shift</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Area</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Old Approach</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">New Approach</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 font-semibold">Structure</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Vague</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"><strong>Clear, checklist-based</strong></td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 font-semibold">Materials</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">3+ year old material</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"><strong>Fresh, modular content</strong></td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 font-semibold">Contextual</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Lacking context</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"><strong>Linked with real-life scenarios</strong></td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 font-semibold">Content</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Lengthy, overwhelming</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"><strong>Bite-sized, easy to understand</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
 
-                            <circle cx="70" cy="60" r="12" fill="var(--white)"/>
-                            <path d="M82 68 A12 12 0 0 1 70 80 L65 85 L75 70 Z" fill="var(--white)"/>
-                        </svg>
-                    </div>
-                    <p class="excellence-card-title">Monitor Communication Efficacy</p>
+                    <!-- Why the Revamp? Section -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-4 text-center">Why the Revamp?</h2>
+                        <ul class="list-disc list-inside text-base sm:text-lg leading-relaxed space-y-2 text-gray-700">
+                            <li>Onboarding previously felt <strong class="text-[var(--gokwik-primary-blue)]">overwhelming</strong> due to multiple products, outdated materials, and unclear ownership.</li>
+                            <li>Our primary <strong class="text-[var(--gokwik-primary-blue)]">goal</strong> is to streamline onboarding, significantly reduce ramp-up time, boost CSM readiness, and seamlessly integrate new hires with the GoKwik ethos.</li>
+                        </ul>
+                    </section>
+
+                    <!-- What New Joiners Said Section -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-4 text-center">What New Joiners Said</h2>
+                        <ul class="list-disc list-inside text-base sm:text-lg leading-relaxed space-y-2 text-gray-700">
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">Old Flow:</strong> Characterized by outdated videos, a lack of Quicksight/Shopify guides, and unclear SPOCs.</li>
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">New Flow:</strong> Features bite-sized modules, updated walkthroughs, clear SPOCs, and an intuitive format.</li>
+                        </ul>
+                    </section>
+
+                    <!-- The Bauer 4Cs Section -->
+                    <section class="mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-6 text-center">The Bauer 4Cs: Pillars of Onboarding Success</h2>
+                        <p class="text-center text-lg mb-8 max-w-3xl mx-auto text-gray-700">Our revamped onboarding strategy is built upon the Bauer 4Cs, ensuring comprehensive readiness for every new team member.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                            <!-- Connection Card -->
+                            <div class="card animated-section">
+                                <h3 class="text-xl excellence-sub-heading mb-3">Connection</h3>
+                                <p class="text-base leading-relaxed text-gray-700">Fostering early relationships and practical exposure:</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-gray-700">
+                                    <li>Live training sessions</li>
+                                    <li>Exposure to merchant calls</li>
+                                </ul>
+                            </div>
+
+                            <!-- Compliance Card -->
+                            <div class="card animated-section">
+                                <h3 class="text-xl excellence-sub-heading mb-3">Compliance</h3>
+                                <p class="text-base leading-relaxed text-gray-700">Equipping new hires with essential tools and structural knowledge:</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-gray-700">
+                                    <li>System and tool access</li>
+                                    <li>Escalation procedures</li>
+                                    <li>Organizational structure overview</li>
+                                </ul>
+                            </div>
+
+                            <!-- Clarification Card -->
+                            <div class="card animated-section">
+                                <h3 class="text-xl excellence-sub-heading mb-3">Clarification</h3>
+                                <p class="text-base leading-relaxed text-gray-700">Ensuring crystal-clear understanding of roles and goals:</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-gray-700">
+                                    <li>Key Performance Indicators (KPIs)</li>
+                                    <li>Role clarity and responsibilities</li>
+                                    <li>Project timelines</li>
+                                </ul>
+                            </div>
+
+                            <!-- Culture Card -->
+                            <div class="card animated-section">
+                                <h3 class="text-xl excellence-sub-heading mb-3">Culture</h3>
+                                <p class="text-base leading-relaxed text-gray-700">Integrating new hires into the team and company ethos:</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-gray-700">
+                                    <li>Shadowing senior CSMs</li>
+                                    <li>Team introductions</li>
+                                    <li>Company rituals and values</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Snapshot of the Revised Flow & What's Included -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-4 text-center">Snapshot of the Revised Flow</h2>
+                        <p class="text-lg text-center mb-6 text-gray-700">What's Included in the New Flow:</p>
+                        <ul class="list-disc list-inside text-base sm:text-lg leading-relaxed space-y-2 text-gray-700">
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">Role clarity + tools access</strong> (email, Slack, CRM)</li>
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">Dashboards</strong> (Checkout, Payments customizations, Shipping, Integrations, Analytics)</li>
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">Shopify + JIRA walkthroughs</strong></li>
+                            <li><strong class="text-[var(--gokwik-primary-blue)]">Quicksight &rarr; Real life use cases</strong></li>
+                        </ul>
+                        <div class="mt-8 text-center space-y-4">
+                            <p class="text-base">
+                                <a href="https://drive.google.com/file/d/1tYm53cOobjftAOfFDEljAQp-4gFRaT8e/view?usp=sharing" target="_blank" class="text-[var(--gokwik-primary-blue)] hover:underline font-semibold">Link to Video</a>
+                            </p>
+                            <p class="text-base">
+                                <a href="https://docs.google.com/spreadsheets/d/1mjqiSzs2qBYqyZ2s4j8CbcsdA60T5NOYH5SToyNygYY/edit?usp=sharing" target="_blank" class="text-[var(--gokwik-primary-blue)] hover:underline font-semibold">Link to Onboarding Template Flow</a>
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Day/Week Activity Table -->
+                    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-12 animated-section">
+                        <h2 class="text-2xl sm:text-3xl excellence-section-heading mb-6 text-center">Detailed Onboarding Activities</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Day</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Week</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Activity</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Links</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Status by Manager of Deep</th>
+                                        <th class="py-3 px-4 csm-onboarding-table-header text-left">Status as marked by CSM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Day 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Week 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Case study should make them aware of Basic GoKwik products</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"><a href="https://www.gokwik.co/success-story" target="_blank" class="text-[var(--gokwik-primary-blue)] hover:underline">GoKwik Success Story</a></td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Day 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Week 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Set up access to tools (email, Slack, CRM)</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Internal Links</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Day 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Week 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Share pre-read materials (mission, org chart, product overview)</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">GoKwik Key People</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Day 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Week 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Success Pod Introduction Checklist</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Internal Checklist</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                    </tr>
+                                    <tr class="csm-onboarding-table-row">
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Day 2</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Week 1</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700">Meet your manager and setup a call with 3 CSMs. (Get yourself added to all important internal calls)</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-gray-700"></td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">&#10003;</td>
+                                    </tr>
+                                    <!-- Add more rows as needed from the PDF -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Footer / Branding -->
+                    <footer class="text-center py-8 animated-section bg-gokwik-blue-darker text-white rounded-b-2xl">
+                        <div class="csm-onboarding-gokwik-logo mb-2"><span>Go</span><span>Kwik</span></div>
+                        <p class="text-sm opacity-80 text-white">Empowering Merchants. Driving Success.</p>
+                    </footer>
                 </div>
             </div>
         </div>
@@ -740,36 +1945,78 @@
         <!-- New Tab: NPS Insights and Next Steps -->
         <div id="npsInsights" class="tab-content p-6 sm:p-8 relative z-10">
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">NPS Insights and Next Steps</h2>
-            <div class="bg-gray-50 rounded-lg p-6 card-shadow text-gray-700">
+            <div class="bg-gray-50 rounded-lg p-6 card-shadow animate-card" style="animation-delay: 0.1s;">
                 <p class="text-lg font-semibold mb-3">Understanding Customer Loyalty: Net Promoter Score (NPS)</p>
-                <p class="mb-4">
-                    Your Net Promoter Score (NPS) is a key indicator of customer loyalty and satisfaction. It measures the willingness of customers to recommend your company's products or services to others.
-                </p>
-                <div class="flex flex-col md:flex-row justify-around items-center gap-6 mb-6">
+                <div class="flex flex-col items-center justify-center gap-6 mb-6">
                     <div class="text-center">
-                        <p class="text-gokwik-accent text-5xl font-extrabold">XX</p>
-                        <p class="text-base font-semibold text-gray-800">Your Current NPS</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-gray-600 text-5xl font-extrabold">YY</p>
-                        <p class="text-base font-semibold text-gray-800">Industry Average NPS</p>
+                        <p class="text-gokwik-accent text-5xl font-extrabold">69.7</p>
+                        <p class="text-base font-semibold text-gray-800">Overall NPS</p>
                     </div>
                 </div>
+
+                <h4 class="text-base font-semibold text-gray-800 mb-2">Detailed NPS Breakdown by Category:</h4>
+                <div class="overflow-x-auto mb-4">
+                    <table class="min-w-full bg-white rounded-lg shadow-sm text-sm">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-700 uppercase text-left">
+                                <th class="py-2 px-4 border-b border-gray-300">Category</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-center">Promoters</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-center">Detractors</th>
+                                <th class="py-2 px-4 border-b border-gray-300 text-center">NPS Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 font-medium">Overall NPS (0-10 scale)</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">120</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">5</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">69.7</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 font-medium">CSM NPS (5-pt scale)</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">125</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">10</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">69.7</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 font-medium">Product NPS (5-pt scale)</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">49</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">35</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">8.48</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 font-medium">Merchant Care NPS (5-pt scale)</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">82</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">20</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">37.58</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 font-medium">Finance NPS (5-pt scale)</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">51</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">49</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">1.21</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <h4 class="text-base font-semibold text-gray-800 mb-2">Key Insights from NPS Feedback:</h4>
                 <ul class="list-disc list-inside text-sm space-y-2 mb-4">
-                    <li>Promoters (Score 9-10): [e.g., "Customers highly value our seamless checkout experience and quick delivery."]</li>
-                    <li>Passives (Score 7-8): [e.g., "Some customers expressed satisfaction but noted minor areas for improvement in post-purchase communication."]</li>
-                    <li>Detractors (Score 0-6): [e.g., "Feedback from detractors often cited issues with return processes or initial setup complexity."]</li>
+                    <li><span class="font-semibold text-green-600">Promoters (120):</span> We have a very strong "promoter" base, especially in Overall and CSM NPS, indicating high satisfaction with our core services and customer support.</li>
+                    <li><span class="font-semibold text-yellow-600">Passives (40):</span> These customers are satisfied but could be converted into promoters with targeted engagement and demonstrating clear ROI.</li>
+                    <li><span class="font-semibold text-red-600">Detractors (5):</span> While a small number overall, the low scores in Product (8.48) and critically in Finance (1.21) highlight specific areas needing immediate attention and de-risking.</li>
                 </ul>
+
                 <h4 class="text-base font-semibold text-gray-800 mb-2">Recommended Next Steps:</h4>
                 <ul class="list-disc list-inside text-sm space-y-2">
-                    <li>Engage Promoters: Encourage reviews and referrals to amplify positive word-of-mouth.</li>
-                    <li>Convert Passives: Implement targeted follow-ups to address minor pain points and convert them into promoters.</li>
-                    <li>Address Detractors: Prioritize resolving issues raised by detractors to prevent churn and improve overall satisfaction.</li>
-                    <li>Continuous Monitoring: Regularly track NPS trends to identify shifts in customer sentiment and react proactively.</li>
+                    <li><span class="font-semibold">Elevate Promoters:</span> Invite them to be part of case studies, provide LinkedIn shout-outs, and include them in panel discussions at webinars. Identify early adopters for enhanced CR optimization flows or dashboard upgrades.</li>
+                    <li><span class="font-semibold">Convert Passives:</span> Conduct in-person MBRs (Merchant Business Reviews), clearly show the ROI view to these merchants, and present a plan of action based on their expressed goals. Highlight quick wins to reinforce perceived ROI.</li>
+                    <li><span class="font-semibold">Rescue Detractors:</span> Prioritize Executive meetings (F2F) with identified detractors (Conscious Chemist, Tripr, Fashion Floor India, BabyOrgano) to de-risk any areas and make the right asks to the Product team.</li>
                 </ul>
             </div>
         </div>
+
+        <!-- Removed Blind Spots Tab Content -->
 
         <!-- Dynamic content for drafts will be loaded here -->
         <div id="draftContent" class="tab-content p-6 sm:p-8 relative z-10">
@@ -777,6 +2024,9 @@
             <div id="weeklySnapshotContent" class="hidden">
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Gokwik Monthly Snapshot for LibasFashion</h2>
                 <div class="max-w-4xl mx-auto bg-white rounded-xl card-shadow overflow-hidden relative">
+                    <!-- Faded Background Logo Layer -->
+                    <div class="gokwik-bg-logo"></div>
+
                     <!-- Header Section -->
                     <div class="p-4 sm:p-6 text-center relative z-10">
                         <h1 class="text-xl sm:text-2xl font-bold text-gokwik-accent leading-tight mb-2">
@@ -799,7 +2049,7 @@
                         </div>
                         <div class="flex flex-col md:flex-row items-center justify-around mt-6 space-y-6 md:space-y-0 md:space-x-6">
                             <div class="metric-value-box">
-                                <p class="text-3xl sm:text-4xl font-extrabold">Rs 20.53 Cr</p>
+                                <p class="text-3xl sm:text-4xl font-extrabold text-gokwik-golden-text">Rs 20.53 Cr</p>
                                 <p class="text-base sm:text-lg font-medium opacity-90 mt-1">Gross Merchandise Value (GMV)</p>
                                 <p class="text-xs sm:text-sm opacity-70 mt-1 flex items-center">
                                     <span class="text-green-300 mr-1">▲</span> This Month: +18.73%
@@ -809,7 +2059,7 @@
                                 </div>
                             </div>
                             <div class="metric-value-box">
-                                <p class="text-3xl sm:text-4xl font-extrabold">105,667</p>
+                                <p class="text-3xl sm:text-4xl font-extrabold text-gokwik-golden-text">105,667</p>
                                 <p class="text-base sm:text-lg font-medium opacity-90 mt-1">Total Orders</p>
                                 <p class="text-xs sm:text-sm opacity-70 mt-1 flex items-center">
                                     <span class="text-green-300 mr-1">▲</span> This Month: +26.42%
@@ -820,7 +2070,6 @@
                             </div>
                         </div>
 
-                        <!-- Key Takeaways -->
                         <div class="bg-white text-gokwik-dark-text p-4 rounded-lg mt-8 shadow-md">
                             <p class="font-bold text-base sm:text-lg mb-2 flex items-center">
                                 Key Highlights:
@@ -878,7 +2127,6 @@
                         </div>
                     </div>
 
-                    <!-- D2C Industry Insights Section -->
                     <div class="bg-gray-50 rounded-b-xl p-6 sm:p-8 mt-6 border-t border-gray-100 relative z-10">
                         <div class="flex items-center mb-6">
                             <h3 class="text-xl font-bold text-gray-900">D2C Industry Insights and Benchmarks</h3>
@@ -894,7 +2142,6 @@
                         </p>
                     </div>
 
-                    <!-- Call to Action / Deep Dive -->
                     <div class="bg-white p-6 sm:p-8 flex flex-col md:flex-row items-center justify-center rounded-b-xl border-t border-gray-100">
                         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                             <a href="[Link to your detailed dashboard/report]" class="cta-button cta-button-primary">
@@ -906,8 +2153,7 @@
                         </div>
                     </div>
 
-                    <!-- Footer -->
-                    <div class="bg-gokwik-dark text-white text-center p-4 text-xs">
+                    <div class="bg-gokwik-blue-darker text-white text-center p-4 text-xs">
                         <p>&copy; [Current Year] Gokwik. All rights reserved.</p>
                         <p class="mt-1">Is Gokwik working well for you? We'd love to hear your feedback: <a href="[Link to Feedback Form]" class="text-blue-300 hover:underline">Provide Feedback Here</a></p>
                     </div>
@@ -917,7 +2163,7 @@
 
 
         <!-- Footer -->
-        <div class="bg-gokwik-dark text-white text-center p-4 text-sm mt-8">
+        <div class="bg-gokwik-golden text-gokwik-blue text-center p-4 text-sm mt-8">
             <p class="text-lg font-bold">SUCCESS POD</p>
         </div>
     </div>
@@ -925,14 +2171,24 @@
     <script>
         // Function to open a main tab
         function openTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            // Hide all tab contents and remove animation classes
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                // Reset animations for all cards/sections in all tabs
+                content.querySelectorAll('.animate-card, .excellence-card, .animated-section, .pod-bar, .pie-chart-container, .ai-hero-section, .ai-content-section, .ai-use-case-module, .ai-conclusion-section, .excellence-group-card, .initiative-item-card, .csm-onboarding-hero-header, .card').forEach(el => {
+                    el.style.animation = 'none';
+                    el.classList.remove('animate');
+                    el.classList.remove('fade-in-up'); // Remove the new animation class
+                });
+                content.querySelectorAll('.excellence-card-icon, .ai-module-visual').forEach(icon => icon.classList.remove('animate'));
+            });
 
             // Deactivate all tab buttons
             document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
 
             // Show the selected tab content
-            document.getElementById(tabName).classList.add('active');
+            const activeTabContent = document.getElementById(tabName);
+            activeTabContent.classList.add('active');
 
             // Activate the clicked tab button
             const clickedButton = document.querySelector(`.tab-button[onclick="openTab('${tabName}')"]`);
@@ -940,9 +2196,151 @@
                 clickedButton.classList.add('active');
             }
 
+            // Handle specific tab animations and content visibility
+            if (tabName === 'executiveSummary' || tabName === 'npsInsights') { // Removed 'blindSpots'
+                activeTabContent.querySelectorAll('.animated-section').forEach((card, index) => {
+                    card.style.animation = `fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards ${index * 0.1}s`;
+                });
+            } else if (tabName === 'podOverlook') {
+                document.querySelectorAll('#podOverlook .animate-card').forEach((podCard, index) => {
+                    podCard.style.animation = `fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards ${index * 0.2}s`;
+                });
+                document.querySelectorAll('#podOverlook .pod-bar').forEach((bar, index) => {
+                    bar.classList.remove('animate');
+                    void bar.offsetWidth;
+                    bar.style.animationDelay = `${index * 0.08 + 0.5}s`;
+                    bar.classList.add('animate');
+                });
+            } else if (tabName === 'upsellOverview') {
+                const pieChart = document.querySelector('#upsellOverview .pie-chart-container');
+                pieChart.classList.remove('animate');
+                void pieChart.offsetWidth;
+                pieChart.classList.add('animate');
+                // Also animate the list cards
+                activeTabContent.querySelectorAll('.animate-card').forEach((card, index) => {
+                    card.style.animation = `fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards ${index * 0.1}s`;
+                });
+            } else if (tabName === 'excellenceCharter') {
+                // Show the main excellence content and hide sub-contents
+                document.getElementById('excellenceMainContent').classList.remove('hidden');
+                document.getElementById('csmOnboardingContent').classList.add('hidden');
+                document.getElementById('backToExcellenceMainButton').classList.add('hidden');
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('fade-in-up');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll(`#${tabName} .excellence-sub-content:not(.hidden) .animated-section, #${tabName} .excellence-sub-content:not(.hidden) .excellence-group-card, #${tabName} .excellence-sub-content:not(.hidden) .excellence-card, #${tabName} .excellence-sub-content:not(.hidden) .initiative-item-card`).forEach(element => {
+                    element.classList.remove('fade-in-up'); // Reset before observing
+                    observer.observe(element);
+                });
+            } else if (tabName === 'aiAutomations') {
+                // Observe all relevant elements for animation within the AI tab
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('fade-in-up');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll(`#${tabName} .animated-section`).forEach(element => {
+                    element.classList.remove('fade-in-up'); // Reset before observing
+                    observer.observe(element);
+                });
+            }
+
             // Hide the dynamic draft tab button when switching to a main tab
             document.getElementById('draftContentTabButton').style.display = 'none';
         }
+
+        // Function to open a sub-tab within the Excellence Charter
+        function openExcellenceSubTab(subTabId) {
+            // Hide the main excellence content
+            document.getElementById('excellenceMainContent').classList.add('hidden');
+
+            // Hide all excellence sub-contents
+            document.querySelectorAll('#excellenceCharter .excellence-sub-content').forEach(content => {
+                content.classList.add('hidden');
+                content.querySelectorAll('.animated-section, .card').forEach(el => {
+                    el.classList.remove('fade-in-up'); // Reset animation state
+                });
+            });
+
+            // Show the selected sub-content
+            const activeSubContent = document.getElementById(subTabId);
+            if (activeSubContent) {
+                activeSubContent.classList.remove('hidden');
+                document.getElementById('backToExcellenceMainButton').classList.remove('hidden');
+
+                // Re-apply animations for the active sub-content
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('fade-in-up');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                activeSubContent.querySelectorAll('.animated-section, .card').forEach(element => {
+                    observer.observe(element);
+                });
+            }
+        }
+
+        // Function to go back to the main Excellence Charter view
+        function backToExcellenceMain() {
+            document.getElementById('csmOnboardingContent').classList.add('hidden');
+            document.getElementById('excellenceMainContent').classList.remove('hidden');
+            document.getElementById('backToExcellenceMainButton').classList.add('hidden');
+
+            // Re-apply animations for the main excellence content
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll(`#excellenceMainContent .animated-section, #excellenceMainContent .excellence-group-card, #excellenceMainContent .excellence-card, #excellenceMainContent .initiative-item-card`).forEach(element => {
+                element.classList.remove('fade-in-up'); // Reset before observing
+                observer.observe(element);
+            });
+        }
+
 
         // Function to open a draft content in a new dynamic tab
         function openDraftContent(contentId) {
@@ -973,7 +2371,74 @@
             openTab('executiveSummary');
             // Ensure the dynamic draft tab button is hidden initially
             document.getElementById('draftContentTabButton').style.display = 'none';
+
+            // GNC Group ARR Data - Initialize chart after DOM is loaded
+            const gncData = {
+                labels: [
+                    'Thrive Co.',
+                    'Bella Vita Luxury',
+                    'Sleepy Cat',
+                    'Springwel'
+                ],
+                datasets: [{
+                    data: [80, 53, 23, 4], // in lakhs
+                    backgroundColor: [
+                        'rgba(240, 152, 25, 0.8)', // Lighter Orange for Thrive Co.
+                        'rgba(17, 54, 101, 0.8)', // Lighter Blue for Bella Vita Luxury
+                        'rgba(240, 152, 25, 0.7)',
+                        'rgba(17, 54, 101, 0.7)'
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            // Chart.js configuration for GNC ARR Donut Chart
+            const gncArrChartCtx = document.getElementById('gncArrChart');
+            if (gncArrChartCtx) { // Check if canvas exists
+                new Chart(gncArrChartCtx, {
+                    type: 'doughnut',
+                    data: gncData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        size: 10 // Reduced font size for legend
+                                    },
+                                    boxWidth: 15, // Reduced box width
+                                    padding: 10 // Reduced padding between legend items
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        return item.chart.data.labels[item.dataIndex];
+                                    },
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (context.parsed) {
+                                            label += ': ₹' + context.parsed + ' Lakhs';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                bottom: 20 // Adjusted padding at the bottom for legend visibility
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
 </html>
+
+
